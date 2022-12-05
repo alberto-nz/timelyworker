@@ -1,15 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
-  firebase
-    .database()
-    .ref("usuarios")
-    .on("value", snapshot => {
-      const data = snapshot.val();
-      console.log(data);
-      const email = document.getElementById("email");
-      const name = document.getElementById("name");
-      data.forEach(element => {
-        email.innerHTML += `<li>${element.email}</li>`;
-        name.innerHTML += `<li>${element.first_name} ${element.last_name}</li>`;
-      });
-    });
+  const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+  ui.start("#firebaseui-auth-container", {
+    queryParameterForWidgetMode: "mode",
+    queryParameterForSignInSuccessUrl: "signInSuccessUrl",
+    signInSuccessUrl: "/dashboard.html",
+    signInFlow: "popup",
+
+    signInOptions: [
+      {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        requireDisplayName: true
+      }
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: function(
+        currentUser,
+        credential,
+        redirectUrl
+      ) {
+        window.location.href = "/dashboard.html";
+        return true;
+      }
+    }
+  });
 });

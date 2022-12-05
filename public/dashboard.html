@@ -4,14 +4,45 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentos</title>
+    <title>timelyworker-dashboard</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Fuentes e iconos necesarios para el dashboard -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700"
+    />
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/42d5adcbca.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
+      rel="stylesheet"
+    />
+    <link
+      id="pagestyle"
+      href="../assets/css/material-dashboard.min.css"
+      rel="stylesheet"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
+    <!-- End - Fuentes e iconos necesarios para el dashboard -->
+
+    <!-- css propio -->
     <link rel="stylesheet" href="main.css" />
+    <!-- End - css propio -->
+
+    <!-- importaciones firebase -->
     <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth__es.js"></script>
     <link
       type="text/css"
@@ -25,88 +56,392 @@
       src="/__/firebase/9.13.0/firebase-database-compat.js"
     ></script>
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- End - importaciones firebase -->
   </head>
-  <body>
-    <h1>Administración</h1>
-    <div id="sign-in-status"></div>
-    <button id="sign-in" onclick="signout()">
-      SingOut
-    </button>
-    <pre id="account-details"></pre>
-    <div class="row">
-      <div class="col-6">
-        <h3>EMAILS</h3>
-        <ul id="email"></ul>
+  <body class="g-sidenav-show  bg-gray-200 dark-version">
+    <aside
+      class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
+      id="sidenav-main"
+    >
+      <div class="sidenav-header">
+        <i
+          class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+          aria-hidden="true"
+          id="iconSidenav"
+        ></i>
+        <a
+          class="navbar-brand m-0"
+          href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard "
+          target="_blank"
+        >
+          <img
+            src="../assets/logo.svg"
+            class="navbar-brand-img h-100"
+            alt="main_logo"
+          />
+        </a>
       </div>
-      <div class="col-6">
-        <h3>NOMBRES</h3>
-        <ul id="name"></ul>
-      </div>
-    </div>
-    <script type="text/javascript">
-      initApp = function() {
-        firebase.auth().onAuthStateChanged(
-          function(user) {
-            if (user) {
-              // User is signed in.
-              var displayName = user.displayName;
-              var email = user.email;
-              var emailVerified = user.emailVerified;
-              var photoURL = user.photoURL;
-              var uid = user.uid;
-              var phoneNumber = user.phoneNumber;
-              var providerData = user.providerData;
-              user.getIdToken().then(function(accessToken) {
-                document.getElementById("sign-in-status").textContent =
-                  "Signed in";
-                // document.getElementById("sign-in").textContent = "Sign out";
-                document.getElementById(
-                  "account-details"
-                ).textContent = JSON.stringify(
-                  {
-                    displayName: displayName,
-                    email: email,
-                    emailVerified: emailVerified,
-                    phoneNumber: phoneNumber,
-                    photoURL: photoURL,
-                    uid: uid,
-                    accessToken: accessToken,
-                    providerData: providerData
-                  },
-                  null,
-                  "  "
-                );
-              });
-            } else {
-              // User is signed out.
-              document.getElementById("sign-in-status").textContent =
-                "Signed out";
-              document.getElementById("sign-in").textContent = "Sign in";
-              document.getElementById("account-details").textContent = "null";
-            }
-          },
-          function(error) {
-            console.log(error);
-          }
-        );
-      };
-      function signout() {
-        firebase
-          .auth()
-          .signOut()
-          .then(function() {
-            console.log("Sign-out successful");
-            window.location.href = "/index.html";
-          })
-          .catch(function(error) {
-            // An error happened.
-          });
-      }
+      <hr class="horizontal light mt-0 mb-2" />
+      <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a
+              class="nav-link text-white active bg-gradient-primary"
+              href="#dashboard"
+            >
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">dashboard</i>
+              </div>
+              <span class="nav-link-text ms-1">Dashboard</span>
+            </a>
+          </li>
 
-      window.addEventListener("load", function() {
-        initApp();
-      });
-    </script>
-    <script src="main.js"></script>
+          <li class="nav-item">
+            <a class="nav-link text-white " href="#status">
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">person_pin</i>
+              </div>
+              <span class="nav-link-text ms-1">Status Usuarios</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white " href="#control">
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">person_search</i>
+              </div>
+              <span class="nav-link-text ms-1">Entradas/Salidas</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white " href="#adduser">
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">personadd</i>
+              </div>
+              <span class="nav-link-text ms-1">Agregar Usuario</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/signing.html" target="_blank">
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">open_in_new</i>
+              </div>
+              <span class="nav-link-text ms-1">Página Firmas</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-white " href="" onclick="signout()">
+              <div
+                class="text-white text-center me-2 d-flex align-items-center justify-content-center"
+              >
+                <i class="material-icons opacity-10">login</i>
+              </div>
+              <span class="nav-link-text ms-1">Sign Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidenav-footer position-absolute w-100 bottom-0 ">
+        <div class="mx-3">
+          <a
+            class="text-xs btn bg-gradient-primary mt-4 w-100"
+            href="#"
+            type="button"
+            id="userSigned"
+          ></a>
+        </div>
+      </div>
+    </aside>
+    <main
+      class="main-content position-relative max-height-vh-100 h-100 border-radius-lg "
+    >
+      <!-- Navbar -->
+      <nav
+        class="navbar navbar-main navbar-expand-lg px-0 m-2 shadow-none border-radius-xl float-end"
+        id="navbarBlur"
+        data-scroll="true"
+      >
+        <div class="container-fluid py-1 px-3">
+          <div
+            class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+            id="navbar"
+          >
+            <ul class="navbar-nav  float-end">
+              <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                <a
+                  href="javascript:;"
+                  class="nav-link text-body p-0"
+                  id="iconNavbarSidenav"
+                >
+                  <div class="sidenav-toggler-inner">
+                    <i class="sidenav-toggler-line"></i>
+                    <i class="sidenav-toggler-line"></i>
+                    <i class="sidenav-toggler-line"></i>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      <div class="container-fluid px-2 px-md-4" id="dashboard">
+        <div
+          class="page-header min-height-300 border-radius-xl mt-4"
+          style="background-image: url('https://images.unsplash.com/photo-1669465716251-0973b3602278?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80');"
+        >
+          <span class="mask  bg-gradient-primary  opacity-6"></span>
+        </div>
+        <div class="card card-body mx-3 mx-md-4 mt-n6">
+          <div class="row gx-4 mb-2">
+            <div class="col-auto">
+              <div class="avatar avatar-xl position-relative">
+                <div
+                  class="icon icon-lg icon-shape d-flex text-light bg-gradient-info shadow-info text-center rounded-5 text-4xl mt-n4 justify-content-center align-items-center"
+                >
+                  <span id="nameInitial"></span>
+                  <span id="surnameInitial"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto my-auto">
+              <div class="h-100">
+                <h5 class="mb-1" id="username"></h5>
+                <p class="mb-0 font-weight-normal text-sm" id="userStatus"></p>
+                <p class="mb-0 font-weight-normal text-sm" id="userEmail"></p>
+                <p class="mb-0 font-weight-normal text-sm" id="userNif"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="horizontal dark my-5" />
+      <div class="container-fluid py-4" id="status">
+        <div
+          class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+        >
+          <h6 class="text-white text-uppercase ps-3">
+            Status actual de empleados
+          </h6>
+        </div>
+        <div class="row mt-5 mb-3">
+          <div class="col-xl-4 col-sm-12">
+            <div class="card">
+              <div class="card-header p-3 pt-2">
+                <div
+                  class="icon icon-lg icon-shape bg-gradient-success shadow-primary text-center border-radius-xl mt-n4 position-absolute"
+                >
+                  <i class="material-icons opacity-10">person</i>
+                </div>
+                <div class="text-end pt-1">
+                  <p class="text-sm mb-0 text-capitalize">
+                    Empleados Conectados
+                  </p>
+                  <h4 class="mb-0" id="countOnline"></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-sm-12">
+            <div class="card">
+              <div class="card-header p-3 pt-2">
+                <div
+                  class="icon icon-lg icon-shape bg-gradient-danger shadow-success text-center border-radius-xl mt-n4 position-absolute"
+                >
+                  <i class="material-icons opacity-10">person</i>
+                </div>
+                <div class="text-end pt-1">
+                  <p class="text-sm mb-0 text-capitalize">
+                    Empleados desconectados
+                  </p>
+                  <h4 class="mb-0" id="countOffline"></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-sm-12">
+            <div class="card">
+              <div class="card-header p-3 pt-2">
+                <div
+                  class="icon icon-lg icon-shape bg-gradient-warning shadow-info text-center border-radius-xl mt-n4 position-absolute"
+                >
+                  <i class="material-icons opacity-10">person</i>
+                </div>
+                <div class="text-end pt-1">
+                  <p class="text-sm mb-0 text-capitalize">
+                    Empleados Descansando
+                  </p>
+                  <h4 class="mb-0" id="countBreak"></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="horizontal dark my-5" />
+        <div class="row" id="control">
+          <div class="col-12">
+            <div class="card my-5">
+              <div
+                class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"
+              >
+                <div
+                  class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                >
+                  <h6 class="text-white text-uppercase ps-3">
+                    Control de entradas y salidas de empleados
+                  </h6>
+                </div>
+              </div>
+              <div class="card-body px-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th
+                          class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                        >
+                          Empleado
+                        </th>
+                        <th
+                          class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                        >
+                          Cargo
+                        </th>
+                        <th
+                          class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                        >
+                          Estado
+                        </th>
+                        <th
+                          class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                        >
+                          Fecha
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="horizontal dark my-4" />
+        <div class="row">
+          <div class="col-8 mt-5" id="adduser">
+            <h4 class="mb-0">Agregar Usuario</h4>
+          </div>
+        </div>
+        <div class="card-body my-5 px-6 mb-200">
+          <form id="myForm" onsubmit="submitForm(event)">
+            <h6 class="heading-small text-muted mb-4">
+              Información de usuario
+            </h6>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input_dni"
+                    >DNI/NIF</label
+                  >
+                  <input
+                    required
+                    type="text"
+                    id="input_dni"
+                    class="form-control"
+                    placeholder="DNI/NIF"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input_email"
+                    >Email</label
+                  >
+                  <input
+                    required
+                    type="email"
+                    id="input_email"
+                    class="form-control"
+                    placeholder="Email"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input_first_name"
+                    >Nombre</label
+                  >
+                  <input
+                    required
+                    type="text"
+                    id="input_first_name"
+                    class="form-control"
+                    placeholder="Nombre"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label class="form-control-label" for="input_last_name"
+                    >Apellido</label
+                  >
+                  <input
+                    required
+                    type="text"
+                    id="input_last_name"
+                    class="form-control"
+                    placeholder="Apellido"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col">
+                <div class="form-group">
+                  <label class="form-control-label" for="input_position"
+                    >Posición</label
+                  >
+                  <input
+                    required
+                    type="text"
+                    id="input_position"
+                    class="form-control"
+                    placeholder="Posición"
+                  />
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn btn-sm bg-gradient-primary float-end mt-3 mb-0"
+              type="submit"
+            >
+              Agregar
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/chartjs.min.js"></script>
+    <script src="../assets/js/material-dashboard.js"></script>
+    <script src="dashboard.js"></script>
   </body>
 </html>
