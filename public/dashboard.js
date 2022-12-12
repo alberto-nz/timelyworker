@@ -1,7 +1,7 @@
 let registerUser;
 let registerUserName;
 let dataResult;
-let userExist = false;
+let userExist = false;              //Declaramos las variables
 let countOnline = 0;
 let countOffline = 0;
 let countBreak = 0;
@@ -32,7 +32,7 @@ initApp = function() {
       const data = snapshot.val();
       dataResult = data;
       data.forEach(user => {
-        if (user.email === registerUser) {
+        if (user.email === registerUser) {            //si el usuario introducido es un usuario registrado
           // console.log(user);
           document.getElementById(
             "username"
@@ -53,8 +53,8 @@ initApp = function() {
           }
           userExist = true;
         }
-        if (user.status === "online") {
-          countOnline++;
+        if (user.status === "online") {     
+          countOnline++;                  //Hacemos la cuenta para saber cuantos están online, offline o de descanso
         }
         if (user.status === "offline") {
           countOffline++;
@@ -67,7 +67,7 @@ initApp = function() {
         document.getElementById("countBreak").textContent = `${countBreak}`;
       });
       if (!userExist) {
-        Swal.fire({
+        Swal.fire({         //sweetalert
           title: "Error!",
           text: "El usuario no está disponible en nuestra base de datos",
           icon: "warning"
@@ -85,7 +85,7 @@ initApp = function() {
                 <div
                   class="icon-shape d-flex text-light bg-gradient-faded-success shadow-info text-center rounded-5 text-2xl mt-n4 justify-content-center align-items-center"
                 >
-                  <span>${user.first_name.charAt(0)}</span>
+                  <span>${user.first_name.charAt(0)}</span>   
                   <span>${user.last_name.charAt(0)}</span>
                 </div>
               </div>
@@ -137,7 +137,7 @@ window.addEventListener("load", function() {
   initApp();
 });
 
-function submitForm(e) {
+function submitForm(e) {              //formulario para agregar usuarios
   let name = e.target["input_first_name"].value;
   let lastName = e.target["input_last_name"].value;
   let dni = e.target["input_dni"].value;
