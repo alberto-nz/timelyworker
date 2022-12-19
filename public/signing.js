@@ -1,11 +1,11 @@
 let registerUser;
-let userActive = [];
+let userActive = [];            
 let userId;
 initApp = function() {
   firebase.auth().onAuthStateChanged(
     function(user) {
       if (user) {
-        registerUser = user.email;
+        registerUser = user.email;        
         let displayName = user.displayName;
         document.getElementById("user").innerHTML = displayName;
       }

@@ -1,29 +1,34 @@
+//Declaración de variables
 let registerUser;
 let registerUserName;
 let dataResult;
-let userExist = false;              //Declaramos las variables
+let userExist = false;              
 let countOnline = 0;
 let countOffline = 0;
 let countBreak = 0;
 let data;
-initApp = function() {
+//Inicialización de aplicación firebase
+initApp = function() {    
   firebase.auth().onAuthStateChanged(
     function(user) {
       if (user) {
-        // User is signed in.
+        // El usuario inicia sesión
         registerUser = user.email;
         user.getIdToken().then(function(accessToken) {
           document.getElementById("userSigned").textContent = `${registerUser}`;
         });
       } else {
-        // User is signed out.
+        // El usuario cierra sesión
         console.log("user is signed out");
       }
     },
+    //Capturamos error si lo hubiese y lo mostramos por consola
     function(error) {
-      console.log(error);
+      console.error(error);
     }
   );
+
+  //Inicialización de la BBDD
 
   firebase
     .database()
@@ -31,9 +36,9 @@ initApp = function() {
     .on("value", snapshot => {
       const data = snapshot.val();
       dataResult = data;
+      //Comprobamos si el correo coincide con el usuario registrado seteamos los datos de usuario
       data.forEach(user => {
-        if (user.email === registerUser) {            //si el usuario introducido es un usuario registrado
-          // console.log(user);
+        if (user.email === registerUser) {            
           document.getElementById(
             "username"
           ).textContent = `${user.first_name} ${user.last_name}`;
@@ -48,13 +53,15 @@ initApp = function() {
           document.getElementById(
             "surnameInitial"
           ).textContent = `${user.last_name.charAt(0)}`;
+          //Si el usuario no tiene rol de administrador redireccionamos a la pantalla de login
           if (!user.admin) {
             window.location.href = "/signing.html";
           }
           userExist = true;
         }
+        //Hacemos la cuenta para saber cuantos están online, offline o de descanso
         if (user.status === "online") {     
-          countOnline++;                  //Hacemos la cuenta para saber cuantos están online, offline o de descanso
+          countOnline++;                  
         }
         if (user.status === "offline") {
           countOffline++;
@@ -62,12 +69,14 @@ initApp = function() {
         if (user.status === "break") {
           countBreak++;
         }
+        //Seteamos los contadores de status de usuarios
         document.getElementById("countOnline").textContent = `${countOnline}`;
         document.getElementById("countOffline").textContent = `${countOffline}`;
         document.getElementById("countBreak").textContent = `${countBreak}`;
       });
+      //Si el usuario no existe lanzamos una alerta con el plugin sweetalert
       if (!userExist) {
-        Swal.fire({         //sweetalert
+        Swal.fire({         
           title: "Error!",
           text: "El usuario no está disponible en nuestra base de datos",
           icon: "warning"
@@ -76,6 +85,7 @@ initApp = function() {
           signout();
         }, 5000);
       }
+      //Seteamos los datos de la tabla
       data.forEach(user => {
         document.getElementById("tableBody").innerHTML += `
           <tr>
@@ -120,11 +130,12 @@ initApp = function() {
       });
     });
 };
+//Función de cerrar sesión. Promesa
 function signout() {
   firebase
     .auth()
     .signOut()
-    .then(function() {
+    .then(function() {    
       console.log("Sign-out successful");
       window.location.href = "/index.html";
     })
@@ -132,12 +143,13 @@ function signout() {
       console.error(error);
     });
 }
-
+//Listener para cuando la página esté cargada iniciamos la aplicación
 window.addEventListener("load", function() {
   initApp();
 });
 
-function submitForm(e) {              //formulario para agregar usuarios
+//formulario para agregar usuarios
+function submitForm(e) {              
   let name = e.target["input_first_name"].value;
   let lastName = e.target["input_last_name"].value;
   let dni = e.target["input_dni"].value;
